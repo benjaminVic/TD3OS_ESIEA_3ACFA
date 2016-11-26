@@ -5,10 +5,10 @@
 
 hole::hole()
 {
-	address_ t adr = 
-	int sz = 
-	struct hole *next =
-	struct hole *prev =
+	address_ t adr; 
+	int sz; 
+	struct hole *next;
+	struct hole *prev;
 }
 
 int main() {
