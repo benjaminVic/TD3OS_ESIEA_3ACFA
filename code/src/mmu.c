@@ -3,18 +3,10 @@
 
 #include "../header/mmu.h"
 
-hole::hole()
-{
-	address_ t adr; 
-	int sz; 
-	struct hole *next;
-	struct hole *prev;
-}
-
 int main() {
 	mem_t *mem = initMem();
 	
-	address_t adr1 = myAlloc(mem, 5);
+	/*address_t adr1 = myAlloc(mem, 5);
 	address_t adr2 = myAlloc(mem, 10);
 	
 	address_t adr3 = myAlloc(mem, 100);
@@ -25,7 +17,23 @@ int main() {
 	myWrite(mem, adr3+9, 34); // write on the 10th byte
 	
 	byte_t val1 = myRead(mem, adr3);
-	byte_t val2 = myRead(mem, adr3+9);
+	byte_t val2 = myRead(mem, adr3+9);*/
+}
+
+mem_t* initMem(){
+	mem_t* mp = malloc(sizeof(mem_t));
+
+	bool mem[SIZE] = {false};
+	memcpy(mp->mem, mem, sizeof(mp->mem));
+
+	/*
+	printf("%lu\n",sizeof(mp->mem));
+	mp->mem = mem;*/
+
+	//On init le premier hole_t
+	//TODO
+
+	return mp;
 }
 
 #endif
