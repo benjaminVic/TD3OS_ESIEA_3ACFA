@@ -34,6 +34,24 @@ mem_t* initMem(){
 	//TODO
 
 	return mp;
+	
+	address_t adr = myRead(mem_t* mem, address_t p);
+	int sz = malloc(sizeof(bool));
+	struct hole* next = 1;
+	struct hole* prev = NULL;
+	
+	do{
+	address_t adr = myRead(mem_t* mp, address_t p);
+	int sz = malloc(sizeof(bool));
+	struct hole* next = SIZE+1;
+	struct hole* prev = SIZE-1;
+	}while(SIZE<65535)
+	
+	address_t adr = myRead(mem_t* mp, address_t p);
+	int sz = malloc(sizeof(bool));
+	struct hole* next = NULL;
+	struct hole* prev = SIZE;
+	
 }
 
 #endif
