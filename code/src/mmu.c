@@ -17,8 +17,8 @@ int main() {
 	myWrite(mem, adr3, true); // write on the 1 st byte
 	myWrite(mem, adr3+9, true); // write on the 10th byte
 	
-	/*byte_t val1 = myRead(mem, adr3);
-	byte_t val2 = myRead(mem, adr3+9);*/
+	bool val1 = myRead(mem, adr3);
+	bool val2 = myRead(mem, adr3+9);
 }
 
 mem_t* initMem(){
@@ -135,8 +135,27 @@ void myWrite(mem_t* mp, address_t p, bool val){
 	} else {
 		printf("Vous n'avez pas de case mémoire sur laquelle écrire\n");
 	}
+}
 
-
+bool myRead(mem_t* mp, address_t p) {
+//On teste la présence de hole_t
+	if (mp->root) {
+		printf("\nLecture de valeur\n");
+		hole_t* hole = mp->root;
+		if (hole->next) {
+			do {
+				if (p > hole->adr
+					&& (p < hole->adr + hole->sz)){
+					break;
+				}
+				hole = hole->next;
+			} while (hole->next);
+			return mp->mem[hole->adr];
+		}
+	} else {
+		printf("Vous n'avez pas de case mémoire dans laquelle lire\n");
+		return NULL;
+	}
 }
 
 #endif
