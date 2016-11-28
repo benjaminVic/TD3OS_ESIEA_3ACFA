@@ -33,10 +33,10 @@ address_t myAlloc(mem_t* mp, int sz);
 
 
 // release memory that has already been allocated previously
-/*void myFree(mem_t* mp, address_t p, int sz);
+void myFree(mem_t* mp, address_t p, int sz);
 
 // assign a value to a byte
-void myWrite(mem_t* mp, address_t p, bool val);
+/*void myWrite(mem_t* mp, address_t p, bool val);
 
 // read memory from a byte
 byte_t myRead(mem_t* mp, address_t p);*/
