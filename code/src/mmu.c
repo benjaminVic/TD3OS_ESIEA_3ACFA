@@ -121,15 +121,17 @@ void myWrite(mem_t* mp, address_t p, bool val){
 	//On teste la présence de hole_t
 	if (mp->root) {
 		printf("\nEcriture de valeur\n");
-		hole_t* newHole = mp->root;
-		do {
-			if (p > newHole->adr 
-				&& (p < newHole->adr + newHole->sz)){
-				break;
-			}
-		} while (newHole->next);
-
-
+		hole_t* hole = mp->root;
+		if (hole->next) {
+			do {
+				if (p > hole->adr
+					&& (p < hole->adr + hole->sz)){
+					break;
+				}
+				hole = hole->next;
+			} while (hole->next);
+			mp->mem[hole->adr]=val;
+		}
 	} else {
 		printf("Vous n'avez pas de case mémoire sur laquelle écrire\n");
 	}
