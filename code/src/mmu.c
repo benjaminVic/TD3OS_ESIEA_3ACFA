@@ -76,20 +76,39 @@ address_t myAlloc(mem_t* mp, int sz){
 }
 
 void myFree(mem_t* mp, address_t p, int sz){
-	printf("Lancement de myFree\n");
+	printf("\nLancement de myFree\n");
 	hole_t* newHole = mp->root;
-	while (newHole->adr != p || newHole->next != NULL){
+
+	while (newHole->next != NULL){
+		if (newHole->adr == p){
+			break;
+		}
 		newHole = newHole->next;
 	}
-	printf("On sort de la boucle d'itération des noeud\n");
 
-	if (newHole->adr == p && newHole->next == NULL){
-		printf("ERROR INVALID POINT\n");
-		return;
+	//if there is no null pointer
+	if (newHole->next) {
+		if (newHole->next->prev) {
+			newHole->next->prev = newHole->prev;
+		}
 	}
+	printf("Next pointer are updated\n");
 
-	newHole->next->prev = newHole->prev;
-	newHole->prev->next = newHole->next;
+	//if there is no null poniter
+	if (newHole->prev){
+		printf("prev : %p\n",newHole->prev);
+		if (newHole->prev->next) {
+			printf("prev.next : %p\n",newHole->prev->next);
+			newHole->prev->next = newHole->next;
+		}
+	} else { //if there is no previous then change root
+		if (newHole->next){
+			mp->root = &newHole->next;
+		} else {
+			mp->root = NULL;
+		}
+	}
+	printf("Prev pointer are update\n");
 
 	int cptCleanup = newHole->adr;
 	while(cptCleanup < (newHole->adr+newHole->sz)){
@@ -97,7 +116,7 @@ void myFree(mem_t* mp, address_t p, int sz){
 		cptCleanup++;
 	}
 
-
+	printf("Time to free everything\n");
 	free(newHole);
 }
 
