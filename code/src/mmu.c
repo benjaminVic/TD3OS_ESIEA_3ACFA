@@ -14,10 +14,10 @@ int main() {
 	myFree(mem, adr2, 10);
 	myFree(mem, adr1, 5);
 	
-	/*myWrite(mem, adr3, 543); // write on the 1 st byte
-	myWrite(mem, adr3+9, 34); // write on the 10th byte
+	myWrite(mem, adr3, true); // write on the 1 st byte
+	myWrite(mem, adr3+9, true); // write on the 10th byte
 	
-	byte_t val1 = myRead(mem, adr3);
+	/*byte_t val1 = myRead(mem, adr3);
 	byte_t val2 = myRead(mem, adr3+9);*/
 }
 
@@ -96,9 +96,7 @@ void myFree(mem_t* mp, address_t p, int sz){
 
 	//if there is no null poniter
 	if (newHole->prev){
-		printf("prev : %p\n",newHole->prev);
 		if (newHole->prev->next) {
-			printf("prev.next : %p\n",newHole->prev->next);
 			newHole->prev->next = newHole->next;
 		}
 	} else { //if there is no previous then change root
@@ -116,8 +114,27 @@ void myFree(mem_t* mp, address_t p, int sz){
 		cptCleanup++;
 	}
 
-	printf("Time to free everything\n");
 	free(newHole);
+}
+
+void myWrite(mem_t* mp, address_t p, bool val){
+	//On teste la présence de hole_t
+	if (mp->root) {
+		printf("\nEcriture de valeur\n");
+		hole_t* newHole = mp->root;
+		do {
+			if (p > newHole->adr 
+				&& (p < newHole->adr + newHole->sz)){
+				break;
+			}
+		} while (newHole->next);
+
+
+	} else {
+		printf("Vous n'avez pas de case mémoire sur laquelle écrire\n");
+	}
+
+
 }
 
 #endif
