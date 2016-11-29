@@ -19,6 +19,7 @@ int main() {
 	
 	bool val1 = myRead(mem, adr3);
 	bool val2 = myRead(mem, adr3+9);
+	printf("Val 1 : %d\nVal 2 : %d\n",val1,val2);
 }
 
 mem_t* initMem(){
@@ -62,7 +63,7 @@ address_t myAlloc(mem_t* mp, int sz){
 		//On affect les valeur et link l'élément
 		hole_t* newHole = malloc(sizeof(hole_t));
 		newHole->adr = firstAdr;
-		printf("Adresse: %d affectée\n",firstAdr);
+		printf("Adresse: %d affectée\n",newHole->adr);
 		newHole->sz = sz;
 		printf("Taille : %d\n", newHole->sz);
 		newHole->next = NULL;
@@ -86,27 +87,24 @@ void myFree(mem_t* mp, address_t p, int sz){
 		newHole = newHole->next;
 	}
 
-	//if there is no null pointer
-	if (newHole->next) {
-		if (newHole->next->prev) {
-			newHole->next->prev = newHole->prev;
-		}
-	}
-	printf("Next pointer are updated\n");
-
-	//if there is no null poniter
+	//if there is a previous element
 	if (newHole->prev){
-		if (newHole->prev->next) {
+		if (newHole->next) {
 			newHole->prev->next = newHole->next;
+			newHole->next->prev = newHole->prev;
+		} else {
+			newHole->prev->next = NULL;
 		}
+		printf("Pointer are updated-if\n");
 	} else { //if there is no previous then change root
 		if (newHole->next){
-			mp->root = &newHole->next;
+			mp->root = newHole->next;
+			newHole->next->prev = NULL;
 		} else {
 			mp->root = NULL;
 		}
+		printf("Pointer are updated-else\n");
 	}
-	printf("Prev pointer are update\n");
 
 	int cptCleanup = newHole->adr;
 	while(cptCleanup < (newHole->adr+newHole->sz)){
@@ -115,6 +113,9 @@ void myFree(mem_t* mp, address_t p, int sz){
 	}
 
 	free(newHole);
+	if (mp->root){
+		printf("%d\n",mp->root->adr);
+	}
 }
 
 void myWrite(mem_t* mp, address_t p, bool val){
@@ -130,7 +131,15 @@ void myWrite(mem_t* mp, address_t p, bool val){
 				}
 				hole = hole->next;
 			} while (hole->next);
-			mp->mem[hole->adr]=val;
+			mp->mem[p]=val;
+			printf("On a écrit %d dans %d\n",val,p);
+		} else {
+			printf("Within else p=%d\n",hole->adr);
+			if (p >= hole->adr
+					&& (p < hole->adr + hole->sz)){
+				mp->mem[p]=val;
+				printf("On a écrit dans le else %d dans %d\n",val,p);
+			}
 		}
 	} else {
 		printf("Vous n'avez pas de case mémoire sur laquelle écrire\n");
@@ -150,7 +159,13 @@ bool myRead(mem_t* mp, address_t p) {
 				}
 				hole = hole->next;
 			} while (hole->next);
-			return mp->mem[hole->adr];
+			printf("On cherche à lire dans la case %d",p);
+			return mp->mem[p];
+		} else {
+			if (p > hole->adr
+					&& (p < hole->adr + hole->sz)){
+					return mp->mem[p];
+			}
 		}
 	} else {
 		printf("Vous n'avez pas de case mémoire dans laquelle lire\n");
