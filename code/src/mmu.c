@@ -4,7 +4,7 @@
 #include "../header/mmu.h"
 
 int main() {
-	mem_t *mem = initMem();
+	mem_t* mem = initMem();
 	
 	address_t adr1 = myAlloc(mem, 5);
 	address_t adr2 = myAlloc(mem, 10);
@@ -19,9 +19,10 @@ int main() {
 	
 	bool val1 = myRead(mem, adr3);
 	bool val2 = myRead(mem, adr3+9);
+	printf("Direct access to val1 %d et non %d\n",mem->mem[adr3], val1);
 	printf("Val 1 : %d\nVal 2 : %d\n",val1,val2);
 }
-
+ 
 mem_t* initMem(){
 	mem_t* mp = malloc(sizeof(mem_t));
 
@@ -153,16 +154,15 @@ bool myRead(mem_t* mp, address_t p) {
 		hole_t* hole = mp->root;
 		if (hole->next) {
 			do {
-				if (p > hole->adr
+				if (p >= hole->adr
 					&& (p < hole->adr + hole->sz)){
-					break;
+					printf("On cherche à lire dans la case %d",p);
+					return mp->mem[p];
 				}
 				hole = hole->next;
 			} while (hole->next);
-			printf("On cherche à lire dans la case %d",p);
-			return mp->mem[p];
 		} else {
-			if (p > hole->adr
+			if (p >= hole->adr
 					&& (p < hole->adr + hole->sz)){
 					return mp->mem[p];
 			}
